@@ -1,24 +1,25 @@
 import axios from "~/axios";
-
-const getAllManagers = () => {
-  return axios.get("/managers");
-};
-
-export function login(username, password) {
-  return axios.post("/admin/login", { username, password });
+// 序列化参数
+function toFormUrlEncoded(data) {
+  return Object.entries(data)
+    .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
+    .join('&')
 }
 
-const updateManager = (id, data) => { 
-  return axios.put(`/managers/${id}`, data);
-};
 
-const deleteManager = (id) => {
-  return axios.delete(`/managers/${id}`);
-};
+export function login(data) {
+  return axios.post("http://ceshi13.dishait.cn/admin/login", toFormUrlEncoded({ 
+    username: data.username,
+    password: data.password
+  }), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+}
+
+
 
 export default {
-  getAllManagers,
-  createManager,
-  updateManager,
-  deleteManager,
+  login,
 };

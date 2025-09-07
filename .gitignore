@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Build outputs
+dist/
+dist-ssr/
+.vitepress/cache
+
+# Environment files
+.env
+.env.*

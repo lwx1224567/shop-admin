@@ -7,23 +7,28 @@ import Index from '~/pages/index.vue'
 import NotFound from '~/pages/404.vue'
 import Login from '~/pages/login.vue'
 import Register from '~/pages/register.vue'
+
 const routes = [{
-    path:"/",
-    component:Index
+    path: "/",
+    component: Index
 },
-{ path: '/:pathMatch(.*)*', name: 'NotFound', 
-    component: NotFound 
+{
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound
 },
-{ path: '/login',  
+{ 
+    path: '/login',  
     component: Login
 },
-{ path: '/register',  
+{
+    path: '/register',
     component: Register
 }
 ]
 
-const router =createRouter({
-    history:createWebHashHistory(),
+const router = createRouter({
+    history: createWebHashHistory(),
     routes
 })
 export default router
