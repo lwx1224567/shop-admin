@@ -8,7 +8,7 @@ function toFormUrlEncoded(data) {
 
 
 export function login(data) {
-  return axios.post("http://ceshi13.dishait.cn/admin/login", toFormUrlEncoded({ 
+  return axios.post('/admin/login', toFormUrlEncoded({
     username: data.username,
     password: data.password
   }), {
@@ -17,9 +17,12 @@ export function login(data) {
     }
   });
 }
-
+export function getInfo(){
+  return axios.post("/admin/getInfo");
+}
 
 
 export default {
   login,
+  getInfo
 };

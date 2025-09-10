@@ -53,13 +53,13 @@
 
 <script setup>
 import { ref } from 'vue'
-import { login } from '~/api/manager'
-import { ElMessage } from 'element-plus'
+import { login,getInfo } from '~/api/manager'
+import { successMessage, errorMessage } from '~/composables/util'
 import { useRouter } from 'vue-router'
-import { useCookies } from '@vueuse/integrations/useCookies'
+import { getToken, setToken, removeToken } from '~/composables/auth'
 
 const router = useRouter()
-const token = useCookies('token') // 响应式 cookie
+
 
 const loginFormRef = ref(null)
 const loading = ref(false)
@@ -95,28 +95,18 @@ function handleLogin() {
    // 调用 login 方法(3.7)
     login(loginForm.value)
       .then(res => {
-        ElMessage.success('登录成功');
-         token.value = res.data.data.token // 存储到 cookie
+        successMessage() // 显示登录成功消息
+        setToken(res.token) // 存储 token
+         console.log("存入的 token:", res.token)
         router.push('/')
         // 登录成功后的逻辑
       })
-      .catch(err => {
-        if (err) {
-      console.log('完整错误对象:', err)
-      if (err.response) {
-        console.log('后端返回错误信息:', err.response.data)
-        ElMessage.error(err.response.data?.msg || '登录失败')
-      } else {
-        ElMessage.error('网络错误或服务器无响应')
-      }
-    }
-    loading.value = false
-  })
-        .finally(() => {
-          loading.value = false
-        })
+       .finally(() => {
+        loading.value = false
       })
+  })
 }
+
 </script>
 
 <style scoped>
