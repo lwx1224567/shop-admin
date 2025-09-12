@@ -57,9 +57,10 @@ import { login,getInfo } from '~/api/manager'
 import { successMessage, errorMessage } from '~/composables/util'
 import { useRouter } from 'vue-router'
 import { getToken, setToken, removeToken } from '~/composables/auth'
+import {useStore} from 'vuex'
 
 const router = useRouter()
-
+const store = useStore()
 
 const loginFormRef = ref(null)
 const loading = ref(false)
@@ -95,18 +96,29 @@ function handleLogin() {
    // 调用 login 方法(3.7)
     login(loginForm.value)
       .then(res => {
+        console.log("完整的登录返回结果:", res)
         successMessage() // 显示登录成功消息
         setToken(res.token) // 存储 token
-         console.log("存入的 token:", res.token)
+        console.log("存入的 token:", res.token)
+        store.commit('setToken', res.token)// 存 token 到 Vuex
+        
+         // 登录成功后，调用 getInfo 获取用户信息
+        getInfo().then(userRes => {
+          console.log("获取到的用户信息:", userRes)
+          store.commit('setUser', userRes) // 存用户信息到 Vuex
+        
         router.push('/')
         // 登录成功后的逻辑
       })
-       .finally(() => {
+      .catch(err => {
+         console.error("获取用户信息失败:", err)
+      })
+      .finally(() => {
         loading.value = false
       })
-  })
+  })  
+})
 }
-
 </script>
 
 <style scoped>
